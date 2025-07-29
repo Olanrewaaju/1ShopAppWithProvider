@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
-// import 'listmore.dart';
-// import 'package:sneaker_provider/order_screen.dart';
+import 'package:sneaker_provider/state_managementfolder.dart/bookmarks.dart';
+import 'package:provider/provider.dart';
 
-class MoreHolder extends StatefulWidget {
+class Arivels extends StatefulWidget {
+  final String id;
   final String name;
   final String currentPrice;
   final String type;
   final String image;
-  const MoreHolder({
+
+  const Arivels({
     super.key,
+    required this.id,
     required this.currentPrice,
     required this.image,
     required this.name,
@@ -16,10 +19,10 @@ class MoreHolder extends StatefulWidget {
   });
 
   @override
-  State<MoreHolder> createState() => _MoreHolderState();
+  State<Arivels> createState() => _ArivelsState();
 }
 
-class _MoreHolderState extends State<MoreHolder> {
+class _ArivelsState extends State<Arivels> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -27,14 +30,14 @@ class _MoreHolderState extends State<MoreHolder> {
         borderRadius: BorderRadius.circular(8),
         color: const Color.fromARGB(102, 226, 230, 235),
       ),
-      width: 289,
+      width: 176,
       margin: EdgeInsets.all(6),
       padding: EdgeInsets.all(12),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Image.asset(widget.image, height: 75),
+          Image.asset(widget.image, height: 70),
           SizedBox(height: 36),
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -66,6 +69,34 @@ class _MoreHolderState extends State<MoreHolder> {
                         ),
                       ),
                     ],
+                  ),
+
+                  Consumer<LikedScreen>(
+                    builder: (context, provider, child) {
+                      final isLiked = provider.isLiked(widget.id);
+                      return IconButton(
+                        onPressed: () {
+                          provider.toggleLike(widget.id);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                isLiked
+                                    ? 'Added to favorites'
+                                    : 'Removed from favorites',
+                              ),
+                              duration: Duration(seconds: 1),
+                            ),
+                          );
+                        },
+                        icon: isLiked
+                            ? Icon(Icons.favorite_border, size: 24)
+                            : Icon(
+                                Icons.favorite,
+                                size: 24,
+                                color: Color.fromARGB(255, 36, 108, 167),
+                              ),
+                      );
+                    },
                   ),
                 ],
               ),

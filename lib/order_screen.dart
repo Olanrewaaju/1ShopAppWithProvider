@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
-import 'main.dart';
+// import 'package:sneaker_provider/list.dart';
+import 'package:sneaker_provider/state_managementfolder.dart/bookmarks.dart';
+import 'package:sneaker_provider/state_managementfolder.dart/cart_notifier.dart';
+import 'listmore.dart';
+// import 'main.dart';
+// import 'list.dart';
+import 'package:provider/provider.dart';
+// import 'package:sneaker_provider/state_managementfolder.dart/cart_notifier.dart';
 
 class OrderScreen extends StatefulWidget {
   final Map<String, dynamic> product;
+  // final String id;
   const OrderScreen({super.key, required this.product});
 
   @override
@@ -12,18 +20,7 @@ class OrderScreen extends StatefulWidget {
 class _OrderScreenState extends State<OrderScreen> {
   List<String> sizes = ['32', '33', '34', '36', '38', '39', '45'];
   int selectedValue = 0;
-  // int counter = 0;
-  // void subtract() {
-  //   setState(() {
-  //     counter--;
-  //   });
-  // }
 
-  // void adder() {
-  //   setState(() {
-  //     counter++;
-  //   });
-  // }
   final ValueNotifier<int> counter = ValueNotifier(0);
   final ValueNotifier<bool> favorites = ValueNotifier(true);
 
@@ -75,14 +72,16 @@ class _OrderScreenState extends State<OrderScreen> {
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      ValueListenableBuilder(
-                        valueListenable: favorites,
-                        builder: (context, value, child) {
+                      Consumer<LikedScreen>(
+                        builder: (context, provider, child) {
+                          final productId = widget.product['id'] as String;
+                          final isLiked = provider.isLiked(productId);
                           return IconButton(
                             onPressed: () {
+                              provider.toggleLike(productId);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: value
+                                  content: isLiked
                                       ? Text('Added to liked ')
                                       : Text('Removed from Liked'),
                                 ),
@@ -91,12 +90,12 @@ class _OrderScreenState extends State<OrderScreen> {
                                 favorites.value = !favorites.value;
                               });
                             },
-                            color: value
-                                ? Colors.black54
-                                : const Color.fromARGB(255, 36, 108, 167),
-                            icon: value
-                                ? Icon(Icons.favorite_border)
-                                : Icon(Icons.favorite),
+                            color: isLiked
+                                ? Color.fromARGB(255, 36, 108, 167)
+                                : Colors.black54,
+                            icon: isLiked
+                                ? Icon(Icons.favorite)
+                                : Icon(Icons.favorite_border),
                           );
                         },
                       ),
@@ -203,30 +202,50 @@ class _OrderScreenState extends State<OrderScreen> {
                                 ),
                               ),
                               Expanded(
-                                child: ElevatedButton(
-                                  onPressed: () {},
-                                  child: Text(
-                                    'Proceed',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                  style: ButtonStyle(
-                                    shape: WidgetStatePropertyAll(
-                                      RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(8),
+                                child: Consumer<CartNotifier>(
+                                  builder: (context, cartNotifier, child) {
+                                    final isIncart = cartNotifier.cartDetails
+                                        .any(
+                                          (item) =>
+                                              item['id'] ==
+                                              widget.product['id'],
+                                        );
+                                    return ElevatedButton(
+                                      onPressed: () {
+                                        context.read<CartNotifier>().addToCart(
+                                          widget.product,
+                                        );
+                                        CartNotifier().addToCart(sneakers[0]);
+                                      },
+                                      child: Text(
+                                        'Proceed',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
                                         ),
                                       ),
-                                    ),
-                                    fixedSize: WidgetStatePropertyAll(
-                                      Size(double.infinity, 52),
-                                    ),
-                                    backgroundColor: WidgetStatePropertyAll(
-                                      const Color.fromARGB(255, 36, 108, 167),
-                                    ),
-                                  ),
+                                      style: ButtonStyle(
+                                        shape: WidgetStatePropertyAll(
+                                          RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(8),
+                                            ),
+                                          ),
+                                        ),
+                                        fixedSize: WidgetStatePropertyAll(
+                                          Size(double.infinity, 52),
+                                        ),
+                                        backgroundColor: WidgetStatePropertyAll(
+                                          const Color.fromARGB(
+                                            255,
+                                            36,
+                                            108,
+                                            167,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
                             ],

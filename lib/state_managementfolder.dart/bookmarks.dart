@@ -20,19 +20,3 @@ class LikedScreen extends ChangeNotifier {
 
   List<String> get likedItemIds => _likedItemIds.toList();
 }
-// 
-// final List<dynamic> _favorites = [];
-
-//   List<dynamic> get favorites => _favorites;
-
-//   void addBookmarks(String item) {
-//     if (!_favorites.contains(item)) {
-//       _favorites.add(item);
-//     }
-//     notifyListeners();
-//   }
-
-//   void removeBookmarks(String item) {
-//     _favorites.remove(item);
-//     notifyListeners();
-//   }

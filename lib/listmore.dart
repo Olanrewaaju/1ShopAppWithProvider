@@ -1,4 +1,4 @@
-final List<dynamic> sneakers = [
+final List<Map<String, dynamic>> sneakers = [
   {
     'id': '0',
     'name': 'New Balance White Pandas',
@@ -119,6 +119,6 @@ final List<dynamic> sneakers = [
         'Combining bold 1970s heritage with contemporary style, the New Balance 327 Vintage Teal features a lightweight nylon-suede upper and exaggerated traction outsole. Its sleek silhouette and vibrant teal colorway make it a must-have for fashion-forward sneaker lovers who appreciate retro flair and modern comfort.',
     'currentPrice': '\$95.00',
     'previousPrice': '\$120.00',
-    'image': 'assets/images/image1.png',
+    'image': 'assets/images/image8.png',
   },
 ];

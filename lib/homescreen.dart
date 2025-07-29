@@ -4,6 +4,7 @@ import 'package:sneaker_provider/best_sellers.dart';
 import 'package:sneaker_provider/listmore.dart';
 import 'package:sneaker_provider/order_screen.dart';
 import 'package:sneaker_provider/see_more.dart';
+// import 'package:sneaker_provider/state_managementfolder.dart/liked_display.dart';
 // import 'package:sneaker_provider/sellers.dart';
 // import 'arrivals.dart';
 import 'list.dart';
@@ -18,6 +19,7 @@ class Homescreen extends StatefulWidget {
 class _HomescreenState extends State<Homescreen> {
   List<String> selectedChips = ['Women', 'Men', 'Kids', 'Sports', 'Fashion'];
   int selected = 0;
+  int tab = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +96,7 @@ class _HomescreenState extends State<Homescreen> {
                         );
                       },
                       child: Arrivals(
+                        id: product['id'] as String,
                         currentPrice: product['currentPrice'] as String,
                         image: product['image'] as String,
                         name: product['name'] as String,
@@ -193,29 +196,6 @@ class _HomescreenState extends State<Homescreen> {
             ],
           ),
         ),
-      ),
-
-      bottomNavigationBar: BottomNavigationBar(
-        elevation: 9,
-        selectedItemColor: Color.fromARGB(255, 36, 108, 167),
-        unselectedItemColor: Colors.black45,
-        selectedLabelStyle: TextStyle(color: Color.fromARGB(255, 36, 108, 167)),
-        unselectedLabelStyle: TextStyle(color: Colors.black45),
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_rounded),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_basket_rounded),
-            label: 'Cart',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bookmark_add_outlined),
-            label: 'Favorites',
-          ),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-        ],
       ),
     );
   }

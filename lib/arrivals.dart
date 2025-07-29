@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:sneaker_provider/state_managementfolder.dart/bookmarks.dart';
+import 'package:provider/provider.dart';
 
 class Arrivals extends StatefulWidget {
+  final String id;
   final String name;
   final String currentPrice;
   final String type;
@@ -8,6 +11,7 @@ class Arrivals extends StatefulWidget {
 
   const Arrivals({
     super.key,
+    required this.id,
     required this.currentPrice,
     required this.image,
     required this.name,
@@ -19,8 +23,6 @@ class Arrivals extends StatefulWidget {
 }
 
 class _ArrivalsState extends State<Arrivals> {
-  ValueNotifier<bool> likeButton = ValueNotifier(true);
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -68,30 +70,31 @@ class _ArrivalsState extends State<Arrivals> {
                       ),
                     ],
                   ),
-                  ValueListenableBuilder(
-                    valueListenable: likeButton,
-                    builder: (context, value, child) {
+
+                  Consumer<LikedScreen>(
+                    builder: (context, provider, child) {
+                      final isLiked = provider.isLiked(widget.id);
                       return IconButton(
                         onPressed: () {
-                          likeButton.value = !likeButton.value;
+                          provider.toggleLike(widget.id);
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
-                                value
-                                    ? 'Added to favorites'
-                                    : 'Removed from favorites',
+                                isLiked
+                                    ? 'Removed from favorites'
+                                    : 'Added to favorites',
                               ),
                               duration: Duration(seconds: 1),
                             ),
                           );
                         },
-                        icon: value
-                            ? Icon(Icons.favorite_border, size: 24)
-                            : Icon(
+                        icon: isLiked
+                            ? Icon(
                                 Icons.favorite,
                                 size: 24,
                                 color: Color.fromARGB(255, 36, 108, 167),
-                              ),
+                              )
+                            : Icon(Icons.favorite_border, size: 24),
                       );
                     },
                   ),

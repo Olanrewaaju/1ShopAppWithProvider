@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:sneaker_provider/bottom_bar.dart';
+// import 'package:sneaker_provider/homescreen.dart';
 // import 'package:sneaker_provider/homescreen.dart';
 // import 'package:sneaker_provider/list.dart';
-import 'package:sneaker_provider/login_screen.dart';
+// import 'package:sneaker_provider/login_screen.dart';
 // import 'package:sneaker_provider/order_screen.dart';
 // import 'package:sneaker_provider/see_more.dart';
 // import 'arrivals.dart';
@@ -9,13 +11,23 @@ import 'package:sneaker_provider/login_screen.dart';
 // import 'best_sellers.dart';
 import 'package:provider/provider.dart';
 import 'package:sneaker_provider/state_managementfolder.dart/bookmarks.dart';
+import 'package:sneaker_provider/state_managementfolder.dart/cart_notifier.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (context) {
-        return LikedScreen();
-      },
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) {
+            return LikedScreen();
+          },
+        ),
+        ChangeNotifierProvider(
+          create: (context) {
+            return CartNotifier();
+          },
+        ),
+      ],
 
       child: const MyApp(),
     ),
@@ -45,7 +57,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: LoginScreen(),
+      home: BottomBar(),
       // OrderScreen(i
 
       //   product: products[0]),
