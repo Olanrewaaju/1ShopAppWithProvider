@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 // import 'package:sneaker_provider/list.dart';
 import 'package:sneaker_provider/state_managementfolder.dart/bookmarks.dart';
 import 'package:sneaker_provider/state_managementfolder.dart/cart_notifier.dart';
+import 'package:sneaker_provider/state_managementfolder.dart/counter.dart';
 import 'listmore.dart';
 // import 'main.dart';
 // import 'list.dart';
@@ -82,8 +83,8 @@ class _OrderScreenState extends State<OrderScreen> {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: isLiked
-                                      ? Text('Added to liked ')
-                                      : Text('Removed from Liked'),
+                                      ? Text('Removed from Liked')
+                                      : Text('Added to liked '),
                                 ),
                               );
                               setState(() {
@@ -168,90 +169,116 @@ class _OrderScreenState extends State<OrderScreen> {
                   SizedBox(height: 67),
                   Align(
                     alignment: Alignment.bottomCenter,
-                    child: ValueListenableBuilder(
-                      valueListenable: counter,
-                      builder: (context, value, child) {
-                        return Container(
-                          height: 80,
-                          color: const Color.fromARGB(255, 237, 236, 236),
-                          child: Row(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                ),
-                                child: IconButton(
-                                  onPressed: () {
-                                    if (counter.value > 0) {
-                                      counter.value--;
-                                    }
-                                  },
-                                  icon: Icon(Icons.remove),
-                                ),
-                              ),
-                              Text('${counter.value}'),
-                              Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                ),
-                                child: IconButton(
-                                  onPressed: () {
-                                    counter.value++;
-                                  },
-                                  icon: Icon(Icons.add),
-                                ),
-                              ),
-                              Expanded(
-                                child: Consumer<CartNotifier>(
-                                  builder: (context, cartNotifier, child) {
-                                    final isIncart = cartNotifier.cartDetails
-                                        .any(
-                                          (item) =>
-                                              item['id'] ==
-                                              widget.product['id'],
-                                        );
-                                    return ElevatedButton(
-                                      onPressed: () {
-                                        context.read<CartNotifier>().addToCart(
-                                          widget.product,
-                                        );
-                                        CartNotifier().addToCart(sneakers[0]);
-                                      },
-                                      child: Text(
-                                        'Proceed',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                      style: ButtonStyle(
-                                        shape: WidgetStatePropertyAll(
-                                          RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                              Radius.circular(8),
-                                            ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          // Wrap the entire content in Expanded
+                          child: Container(
+                            height: 80,
+                            color: const Color.fromARGB(255, 237, 236, 236),
+                            child: Row(
+                              children: [
+                                // Counter section
+                                Consumer<Counter>(
+                                  builder: (context, value, child) {
+                                    return Row(
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: IconButton(
+                                            onPressed: () {
+                                              value.decrement(
+                                                widget.product['id'],
+                                              );
+                                            },
+                                            icon: Icon(Icons.remove),
                                           ),
                                         ),
-                                        fixedSize: WidgetStatePropertyAll(
-                                          Size(double.infinity, 52),
+                                        Text(
+                                          '${value.getCount(widget.product['id'])}',
                                         ),
-                                        backgroundColor: WidgetStatePropertyAll(
-                                          const Color.fromARGB(
-                                            255,
-                                            36,
-                                            108,
-                                            167,
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: IconButton(
+                                            onPressed: () {
+                                              value.increment(
+                                                widget.product['id'],
+                                              );
+                                            },
+                                            icon: Icon(Icons.add),
                                           ),
                                         ),
-                                      ),
+                                      ],
                                     );
                                   },
                                 ),
-                              ),
-                            ],
+
+                                // Button section
+                                Expanded(
+                                  child: Consumer<CartNotifier>(
+                                    builder: (context, cartNotifier, child) {
+                                      final isIncart = cartNotifier.cartDetails
+                                          .any(
+                                            (item) =>
+                                                item['id'] ==
+                                                widget.product['id'],
+                                          );
+                                      return ElevatedButton(
+                                        onPressed: () {
+                                          context
+                                              .read<CartNotifier>()
+                                              .addToCart(widget.product);
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
+                                            const SnackBar(
+                                              content: Text('Added to cart'),
+                                              duration: Duration(seconds: 2),
+                                            ),
+                                          );
+                                        },
+                                        child: Text(
+                                          'Proceed',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        style: ButtonStyle(
+                                          shape: WidgetStatePropertyAll(
+                                            RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(8),
+                                              ),
+                                            ),
+                                          ),
+                                          fixedSize: WidgetStatePropertyAll(
+                                            Size(double.infinity, 52),
+                                          ),
+                                          backgroundColor:
+                                              WidgetStatePropertyAll(
+                                                const Color.fromARGB(
+                                                  255,
+                                                  36,
+                                                  108,
+                                                  167,
+                                                ),
+                                              ),
+                                          // ...existing button style...
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        );
-                      },
+                        ),
+                      ],
                     ),
                   ),
                 ],

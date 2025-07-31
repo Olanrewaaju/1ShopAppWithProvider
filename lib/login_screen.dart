@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sneaker_provider/homescreen.dart';
+import 'package:sneaker_provider/bottom_bar.dart';
+//import 'package:sneaker_provider/homescreen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -29,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
       context,
       MaterialPageRoute(
         builder: (context) {
-          return Homescreen();
+          return BottomBar();
         },
       ),
     );

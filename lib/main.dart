@@ -10,8 +10,10 @@ import 'package:sneaker_provider/bottom_bar.dart';
 
 // import 'best_sellers.dart';
 import 'package:provider/provider.dart';
+import 'package:sneaker_provider/login_screen.dart';
 import 'package:sneaker_provider/state_managementfolder.dart/bookmarks.dart';
 import 'package:sneaker_provider/state_managementfolder.dart/cart_notifier.dart';
+import 'package:sneaker_provider/state_managementfolder.dart/counter.dart';
 
 void main() {
   runApp(
@@ -25,6 +27,11 @@ void main() {
         ChangeNotifierProvider(
           create: (context) {
             return CartNotifier();
+          },
+        ),
+        ChangeNotifierProvider(
+          create: (context) {
+            return Counter();
           },
         ),
       ],
@@ -57,7 +64,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: BottomBar(),
+      home: LoginScreen(),
       // OrderScreen(i
 
       //   product: products[0]),
